@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Actions possibles :"
+        android:textColor="@color/colorTexteCommande"
         android:id="@+id/textView2"/>
 
     <LinearLayout
@@ -23,6 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textView3"
+            android:textColor="@color/colorTexteCommande"
             android:layout_weight="1" />
 
         <TextView
@@ -30,6 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textView"
+            android:textColor="@color/colorTexteCommande"
             android:layout_weight="1" />
     </LinearLayout>
 

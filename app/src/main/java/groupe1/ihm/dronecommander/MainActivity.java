@@ -4,10 +4,11 @@ package groupe1.ihm.dronecommander;
  * Created by TheKing on 10/11/2016.
  * Complemented by TheRegicide on 10/11/2016
  */
+import android.media.MediaPlayer;
 import android.support.v4.view.ViewPager;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -19,13 +20,9 @@ import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
 
-import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager pager;
     private ViewPagerAdapter adapter;
     private Button boutonMicro;
+    private MediaPlayer son_down;
+    private MediaPlayer son_up;
 
 
     @Override
@@ -285,16 +284,21 @@ public class MainActivity extends AppCompatActivity {
 
         boutonMicro.setBackgroundResource(R.drawable.micoff2);
 
+        son_down = MediaPlayer.create(this, R.raw.son_micdown);
+        son_up = MediaPlayer.create(this, R.raw.son_micup);
+
         boutonMicro.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch(event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         boutonMicro.setBackgroundResource(R.drawable.micon2);
+                        son_down.start();
                         startRecording();
                         break;
                     case MotionEvent.ACTION_UP:
                         stopRecording();
+                        son_up.start();
                         boutonMicro.setBackgroundResource(R.drawable.micoff2);
                         break;
                 }
@@ -311,7 +315,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //ajoute les entrées de menu_test à l'ActionBar
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }

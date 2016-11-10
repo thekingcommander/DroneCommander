@@ -7,8 +7,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="150dp"
         android:id="@+id/anim_test"
         android:contentDescription="animation_test"
         android:scaleType="center"
@@ -21,6 +20,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:layout_height="150dp" />
 
 </android.support.constraint.ConstraintLayout>
