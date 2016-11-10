@@ -2,7 +2,9 @@ package groupe1.ihm.dronecommander;
 
 /**
  * Created by TheKing on 10/11/2016.
+ * Complemented by TheRegicide on 10/11/2016
  */
+import android.support.v4.view.ViewPager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -45,21 +47,24 @@ public class MainActivity extends AppCompatActivity {
     int[] bufferData;
     int bytesRecorded;
 
+
+    // Variables utilisées par l'interface
+    private ViewPager pager;
+    private ViewPagerAdapter adapter;
+    private Button boutonMicro;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setButtonHandlers();
+
+        init_layout();
 
         bufferSize = AudioRecord.getMinBufferSize
                 (RECORDER_SAMPLERATE,RECORDER_CHANNELS,RECORDER_AUDIO_ENCODING)*3;
 
         audioData = new short [bufferSize]; //short array that pcm data is put into.
-    }
-
-    private void setButtonHandlers() {
-        ((Button)findViewById(R.id.btnStart)).setOnTouchListener(btnClick);
-
     }
 
 
@@ -262,26 +267,53 @@ public class MainActivity extends AppCompatActivity {
         out.write(header, 0, 44);
     }
 
-    private OnTouchListener btnClick = new OnTouchListener() {
-        @Override
-        public boolean onTouch(View arg0, MotionEvent arg1) {
+    private void init_layout(){
 
-            if (arg1.getAction()== MotionEvent.ACTION_DOWN){
-                startRecording();
+        init_bouton();
 
+        pager = (ViewPager) findViewById(R.id.viewpager);
+        setPagerAdapter();
+    }
 
+    /**
+     * Initialisation du bouton d'enregistrement
+     * Mise en place du setOnTouchListener
+     */
+    private void init_bouton() {
 
+        boutonMicro = (Button) findViewById(R.id.button_micro);
 
-            } else if (arg1.getAction()== MotionEvent.ACTION_UP){
-                stopRecording();
+        boutonMicro.setBackgroundResource(R.drawable.micoff2);
 
-
+        boutonMicro.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        boutonMicro.setBackgroundResource(R.drawable.micon2);
+                        startRecording();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        stopRecording();
+                        boutonMicro.setBackgroundResource(R.drawable.micoff2);
+                        break;
+                }
+                return true;
             }
-            return true;
-        }
-    };
+        });
 
+    }
 
+    private void setPagerAdapter() {
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        pager.setAdapter(adapter);
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //ajoute les entrées de menu_test à l'ActionBar
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
 
 }
