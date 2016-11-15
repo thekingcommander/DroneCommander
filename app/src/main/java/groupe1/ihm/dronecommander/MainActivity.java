@@ -4,8 +4,11 @@ package groupe1.ihm.dronecommander;
  * Created by TheKing on 10/11/2016.
  * Complemented by TheRegicide on 10/11/2016
  */
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.support.v4.view.ViewPager;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -23,6 +26,8 @@ import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.widget.Button;
+
+import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
     private Button boutonMicro;
     private MediaPlayer son_down;
     private MediaPlayer son_up;
+
+    private SharedPreferences preferences;
+    private Boolean sound;
 
 
     @Override
@@ -287,18 +295,31 @@ public class MainActivity extends AppCompatActivity {
         son_down = MediaPlayer.create(this, R.raw.son_micdown);
         son_up = MediaPlayer.create(this, R.raw.son_micup);
 
+        //Recupere les preferences de l'utilisateur
+        preferences = getDefaultSharedPreferences(getApplicationContext());
+        sound = preferences.getBoolean("volume", true);
+
+
         boutonMicro.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                sound = preferences.getBoolean("volume", true);
+
+                System.out.println("Sound : " + preferences.getBoolean("volume", true));
+
                 switch(event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         boutonMicro.setBackgroundResource(R.drawable.micon2);
-                        son_down.start();
+                        if(sound) {
+                            son_down.start();
+                        }
                         startRecording();
                         break;
                     case MotionEvent.ACTION_UP:
                         stopRecording();
-                        son_up.start();
+                        if(sound) {
+                            son_up.start();
+                        }
                         boutonMicro.setBackgroundResource(R.drawable.micoff2);
                         break;
                 }
@@ -317,6 +338,19 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            Intent intent = new Intent(MainActivity.this, ActivitySettings.class);
+            startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }
