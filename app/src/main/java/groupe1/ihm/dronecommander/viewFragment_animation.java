@@ -13,6 +13,7 @@ import android.widget.ImageView;
  */
 
 public class viewFragment_animation  extends Fragment {
+
     public static Fragment newInstance() {
         viewFragment_animation instance;
         instance = new viewFragment_animation();

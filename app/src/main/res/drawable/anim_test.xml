@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <animation-list xmlns:android="http://schemas.android.com/apk/res/android" android:oneshot="false">
 
-    <item android:drawable="@drawable/anime_test8"
+    <item android:drawable="@drawable/droneface_1"
     android:duration="60" />
-    <item android:drawable="@drawable/anime_test7"
+    <item android:drawable="@drawable/droneface_2"
     android:duration="60" />
-    <item android:drawable="@drawable/anime_test6"
+    <item android:drawable="@drawable/droneface_3"
         android:duration="60" />
-    <item android:drawable="@drawable/anime_test5"
+    <item android:drawable="@drawable/droneface_4"
         android:duration="60" />
-    <item android:drawable="@drawable/anime_test4"
+    <item android:drawable="@drawable/droneface_5"
         android:duration="60" />
-    <item android:drawable="@drawable/anime_test3"
+    <item android:drawable="@drawable/droneface_6"
         android:duration="60" />
-    <item android:drawable="@drawable/anime_test2"
+    <item android:drawable="@drawable/droneface_7"
         android:duration="60" />
-    <item android:drawable="@drawable/anime_test1"
+    <item android:drawable="@drawable/droneface_8"
         android:duration="60" />
 
 </animation-list>

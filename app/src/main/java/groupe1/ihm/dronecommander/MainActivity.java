@@ -60,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private Boolean sound;
 
+    private Button boutonReplay;
+    private MediaPlayer last_record;
+    private boolean recorded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -276,11 +279,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void init_layout(){
 
-        init_bouton();
 
         pager = (ViewPager) findViewById(R.id.viewpager);
         setPagerAdapter();
+        init_bouton();
     }
+
+
 
     /**
      * Initialisation du bouton d'enregistrement
@@ -288,6 +293,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void init_bouton() {
 
+        /** Bouton Micro **/
         boutonMicro = (Button) findViewById(R.id.button_micro);
 
         boutonMicro.setBackgroundResource(R.drawable.micoff2);
@@ -299,31 +305,73 @@ public class MainActivity extends AppCompatActivity {
         preferences = getDefaultSharedPreferences(getApplicationContext());
         sound = preferences.getBoolean("volume", true);
 
-
         boutonMicro.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 sound = preferences.getBoolean("volume", true);
 
-                System.out.println("Sound : " + preferences.getBoolean("volume", true));
-
                 switch(event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+
                         boutonMicro.setBackgroundResource(R.drawable.micon2);
+
                         if(sound) {
                             son_down.start();
                         }
+                        while(son_down.isPlaying());
+
                         startRecording();
+
                         break;
+
                     case MotionEvent.ACTION_UP:
+
                         stopRecording();
+                        recorded = true;
+
                         if(sound) {
                             son_up.start();
                         }
+
                         boutonMicro.setBackgroundResource(R.drawable.micoff2);
+
                         break;
                 }
                 return true;
+            }
+        });
+
+
+        /** Bouton Replay **/
+        recorded = false;
+
+        last_record = new MediaPlayer();
+
+        try {
+            last_record.setDataSource(getFilename());
+            last_record.prepare();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        boutonReplay = (Button) findViewById(R.id.replaybutton);
+
+        last_record.setOnCompletionListener(new MediaPlayer.OnCompletionListener()
+        {
+            @Override
+            public void onCompletion(MediaPlayer mp)
+            {
+                boutonReplay.setBackgroundResource(R.drawable.replaybutton);
+            }
+        });
+
+        boutonReplay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(recorded && !last_record.isPlaying()) {
+                    boutonReplay.setBackgroundResource(R.drawable.replaybuttonallume);
+                    last_record.start();
+                }
             }
         });
 

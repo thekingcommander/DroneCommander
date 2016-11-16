@@ -4,9 +4,5 @@
     <color name="colorPrimaryDark">#193441</color>
     <color name="colorSecond">#91aa9d</color>
     <color name="colorAccent">#193441</color>
-    <!--<color name="colorPrimary">#ffb03b</color>
-    <color name="colorPrimaryDark">#b64926</color>
-    <color name="colorSecond">#fff0a5</color>
-    <color name="colorAccent">#8e2800</color>-->
     <color name="colorTexteCommande">#000000</color>
 </resources>
