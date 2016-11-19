@@ -20,20 +20,21 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:text="Tourne droite\nTourne gauche\nFais un flip\nArrête toi"
+            android:text="Avance \n Recule  \n Droite \n Gauche \n Etat d&apos;urgence\nPlus haut\nPlus bas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"
+            android:textColor="@color/colorTexteCommande"
+            android:layout_weight="1" />
+
+        <TextView
+            android:text="Tourne droite\nTourne gauche\nFais un flip\nArrête toi\nAtterissage\nDecollage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textView3"
             android:textColor="@color/colorTexteCommande"
             android:layout_weight="1" />
 
-        <TextView
-            android:text="Avance \n Recule  \n Droite \n Gauche \n Etat d&apos;urgence"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView"
-            android:textColor="@color/colorTexteCommande"
-            android:layout_weight="1" />
     </LinearLayout>
 
 </LinearLayout>

@@ -26,13 +26,14 @@ import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int RECORDER_BPP = 16;
-    private static final String AUDIO_RECORDER_FILE_EXT_WAV = "ordre.wav";
+    public static final String AUDIO_RECORDER_FILE_EXT_WAV = "ordre";
     private static final String AUDIO_RECORDER_FOLDER = "AudioRecorder";
     private static final String AUDIO_RECORDER_TEMP_FILE = "record_temp.raw";
     private static final int RECORDER_SAMPLERATE = 44100;
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     short[] audioData;
 
     private AudioRecord recorder = null;
-    private int bufferSize = 0;
+    private static int bufferSize = 0;
     private Thread recordingThread = null;
     private boolean isRecording = false;
 //    Complex[] fftTempArray;
@@ -60,9 +61,11 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private Boolean sound;
 
-    private Button boutonReplay;
+    private ImageButton boutonReplay;
     private MediaPlayer last_record;
     private boolean recorded;
+
+    private ImageButton boutonSave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,10 +80,7 @@ public class MainActivity extends AppCompatActivity {
         audioData = new short [bufferSize]; //short array that pcm data is put into.
     }
 
-
-
-
-    private String getFilename(){
+    public static String getFilename(String fileName){
         String filepath = Environment.getExternalStorageDirectory().getPath();
         File file = new File(filepath,AUDIO_RECORDER_FOLDER);
 
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             file.mkdirs();
         }
 
-        return (file.getAbsolutePath() + "/" + AUDIO_RECORDER_FILE_EXT_WAV);
+        return (file.getAbsolutePath() + "/" + fileName + ".wav");
     }
 
     private String getTempFilename() {
@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
             recordingThread = null;
         }
 
-        copyWaveFile(getTempFilename(),getFilename());
+        copyWaveFile(getTempFilename(),getFilename(AUDIO_RECORDER_FILE_EXT_WAV));
         deleteTempFile();
     }
 
@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
         file.delete();
     }
 
-    private void copyWaveFile(String inFilename,String outFilename){
+    public static void copyWaveFile(String inFilename,String outFilename){
         FileInputStream in = null;
         FileOutputStream out = null;
         long totalAudioLen = 0;
@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void WriteWaveFileHeader(
+    private static void WriteWaveFileHeader(
             FileOutputStream out, long totalAudioLen,
             long totalDataLen, long longSampleRate, int channels,
             long byteRate) throws IOException
@@ -282,16 +282,16 @@ public class MainActivity extends AppCompatActivity {
 
         pager = (ViewPager) findViewById(R.id.viewpager);
         setPagerAdapter();
-        init_bouton();
+        init_BoutonRecord();
+        init_BoutonReplay();
+        init_BoutonSave();
     }
-
-
 
     /**
      * Initialisation du bouton d'enregistrement
      * Mise en place du setOnTouchListener
      */
-    private void init_bouton() {
+    private void init_BoutonRecord() {
 
         /** Bouton Micro **/
         boutonMicro = (Button) findViewById(R.id.button_micro);
@@ -310,15 +310,15 @@ public class MainActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 sound = preferences.getBoolean("volume", true);
 
-                switch(event.getAction()) {
+                switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
 
                         boutonMicro.setBackgroundResource(R.drawable.micon2);
 
-                        if(sound) {
+                        if (sound) {
                             son_down.start();
                         }
-                        while(son_down.isPlaying());
+                        while (son_down.isPlaying()) ;
 
                         startRecording();
 
@@ -329,7 +329,7 @@ public class MainActivity extends AppCompatActivity {
                         stopRecording();
                         recorded = true;
 
-                        if(sound) {
+                        if (sound) {
                             son_up.start();
                         }
 
@@ -340,7 +340,12 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
 
+    /**
+     * Initialisation du bouton de replay
+     */
+    private void init_BoutonReplay(){
 
         /** Bouton Replay **/
         recorded = false;
@@ -348,13 +353,13 @@ public class MainActivity extends AppCompatActivity {
         last_record = new MediaPlayer();
 
         try {
-            last_record.setDataSource(getFilename());
+            last_record.setDataSource(getFilename(AUDIO_RECORDER_FILE_EXT_WAV));
             last_record.prepare();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        boutonReplay = (Button) findViewById(R.id.replaybutton);
+        boutonReplay = (ImageButton) findViewById(R.id.replaybutton);
 
         last_record.setOnCompletionListener(new MediaPlayer.OnCompletionListener()
         {
@@ -370,11 +375,34 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(recorded && !last_record.isPlaying()) {
                     boutonReplay.setBackgroundResource(R.drawable.replaybuttonallume);
+                    try {
+                        last_record.reset();
+                        last_record.setDataSource(getFilename(AUDIO_RECORDER_FILE_EXT_WAV));
+                        last_record.prepare();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     last_record.start();
                 }
             }
         });
 
+    }
+
+    /**
+     * Initialisation du bouton de sauvegarde
+     */
+    private void init_BoutonSave(){
+        boutonSave = (ImageButton) findViewById(R.id.savebutton);
+        boutonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(recorded) {
+                    Intent intent = new Intent(MainActivity.this,Popup_Save.class);
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     private void setPagerAdapter() {

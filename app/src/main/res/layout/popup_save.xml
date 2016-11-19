@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_height="match_parent"
+    android:background="#d1dbbd">
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Nom"
+        android:ems="10"
+        android:id="@+id/editText_save"
+        android:gravity="center_vertical"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="Enregistrer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText_save"
+        android:layout_alignLeft="@+id/editText_save"
+        android:layout_alignStart="@+id/editText_save"
+        android:layout_marginTop="18dp"
+        android:id="@+id/button_saveenregistrer" />
+
+    <Button
+        android:text="Annuler"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/button_saveenregistrer"
+        android:layout_alignRight="@+id/editText_save"
+        android:layout_alignEnd="@+id/editText_save"
+        android:id="@+id/button_saveannuler" />
+</RelativeLayout>

@@ -21,9 +21,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ActivitySettings"
             android:label="@string/title_activity_settings" />
+
+        <activity
+            android:name=".Popup_Save"
+            android:theme="@style/PopUpTheme"
+            android:screenOrientation="portrait"/>
 
     </application>
 
